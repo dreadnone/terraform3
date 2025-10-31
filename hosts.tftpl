@@ -1,20 +1,13 @@
+
 [webservers]
+{% for server in web_servers %}
+{{server.name}} ansible_host={{server.external_ip_address}} fqdn={{server.network_interface[0].fqdn}}
+{% endfor %}
 
-%{~ for i in webservers ~}
-${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
-
-%{~ endfor ~}
-
-[workers]
-
-%{~ for i in databases ~}
-${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
-
-%{~ endfor ~}
+[databases]
+{% for db in databases %}
+{{db.name}} ansible_host={{db.external_ip_address}} fqdn={{db.network_interface[0].fqdn}}
+{% endfor %}
 
 [storage]
-
-%{~ for i in storage ~}
-${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
-
-%{~ endfor ~}
+{{storage.name}} ansible_host={{storage.external_ip_address}} fqdn={{storage.network_interface[0].fqdn}}
