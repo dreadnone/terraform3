@@ -34,11 +34,52 @@ variable "vpc_name" {
 }
 
 variable "vm_base" {
-  type = map(any)
+  type = object({
+    cores         = number
+    memory        = number
+    core_fraction = number
+    family        = string
+  })
   default = {
-    cores         = 2,
-    memory        = 1,
-    core_fraction = 5,
-    family = "ubuntu-2404-lts-oslogin"
+    cores         = 2
+    memory        = 1
+    core_fraction = 5
+    family        = "ubuntu-2404-lts"
   }
+}
+
+variable "each_vm" {
+  type = list(object({
+    vm_name     = string
+    cpu         = number
+    ram         = number
+    disk_volume = number
+  }))
+  description = "Configuration for database VMs"
+  default = [
+    {
+      vm_name     = "main"
+      cpu         = 2
+      ram         = 2
+      disk_volume = 10
+    },
+    {
+      vm_name     = "replica"
+      cpu         = 4
+      ram         = 4
+      disk_volume = 20
+    }
+  ]
+}
+
+variable "disk_count" {
+  type        = number
+  default     = 3
+  description = "Number of additional disks"
+}
+
+variable "disk_size" {
+  type        = number
+  default     = 1
+  description = "Size of each disk in GB"
 }

@@ -1,4 +1,3 @@
-
 [webservers]
 {% for server in web_servers %}
 {{server.name}} ansible_host={{server.external_ip_address}} fqdn={{server.network_interface[0].fqdn}}
