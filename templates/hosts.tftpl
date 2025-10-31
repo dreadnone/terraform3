@@ -1,11 +1,12 @@
-%{ for group_name, group_config in groups ~}
-[${group_name}]
-%{ for instance_key, instance in group_config.instances ~}
-${instance.name} ansible_host=${instance.network_interface.0.nat_ip_address} fqdn=${instance.fqdn}
-%{ endfor ~}
+[webservers]
+{% for server in web_servers %}
+{{server.name}} ansible_host={{server.external_ip_address}} fqdn={{server.network_interface[0].fqdn}}
+{% endfor %}
 
-%{ endfor ~}
+[databases]
+{% for db in databases %}
+{{db.name}} ansible_host={{db.external_ip_address}} fqdn={{db.network_interface[0].fqdn}}
+{% endfor %}
 
-[all:vars]
-ansible_user=ubuntu
-ansible_ssh_private_key_file=~/.ssh/id_rsa
+[storage]
+{{storage.name}} ansible_host={{storage.external_ip_address}} fqdn={{storage.network_interface[0].fqdn}}
